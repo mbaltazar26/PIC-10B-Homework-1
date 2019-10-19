@@ -14,8 +14,8 @@ using namespace std;
 
 Game::Game()
 {
-    p1 = Person();
-    p2 = Person();
+    p1 = new Person();
+    p2 = new Person();
 }
 
 std::string board[9] = {" "," "," "," "," "," "," "," "};
@@ -23,7 +23,7 @@ std::string board[9] = {" "," "," "," "," "," "," "," "};
 //drawing the grid
 void Game::grid()
 {
-    //        cout << "01234567|1234567|1234567"<< endl;
+    cout << p1->playerName() << " (X) - " << p2->playerName() << " (O)" << endl;
     cout << "   1        2       3   "<< endl;
     cout << "        |       |       "<< endl;
     cout << "1   " << board[0] << "   |   " << board[1] << "   |   " << board[2] << "   "<< endl;
@@ -36,11 +36,19 @@ void Game::grid()
     cout << "        |       |       "<< endl;
 }
 
+void Game::clearGrid()
+{
+    for (int i = 0; i < 9; i++)
+    {
+        board[i]=" ";
+    }
+}
+
 //create the players
 Game::Game(string playerOne, string playerTwo)
 {
-    p1 = Person(playerOne);
-    p2 = Person(playerTwo);
+    p1 = new Person(playerOne);
+    p2 = new Person(playerTwo);
     //playMe(*p1, *p2);
 }
 
@@ -85,32 +93,37 @@ void Game::playerMove(Person& player)
     int coordinates;
     cout << player.playerName() << "'s turn. Please input coordinates: ";
     cin >> coordinates;
-    if (!cin)
+    while (!cin)
     {
         cin.clear();
         cin.ignore(10000,'\n');
+        cout << "Please try again: " << endl;
+        cin >> coordinates;
     }
-    int pos = conversion(coordinates);
-    if (board[pos].compare(" ") != 0)   //space not available
+    while (conversion(coordinates) == -1)
     {
         cin.clear();
         cin.ignore(10000,'\n');
+        cout << "Please try again: " << endl;
+        cin >> coordinates;
     }
-    if (pos < 0)
+    while (board[conversion(coordinates)].compare(" ") != 0)   //space not available
     {
         cin.clear();
         cin.ignore(10000,'\n');
+        cout << "Please try again: " << endl;
+        cin >> coordinates;
     }
     //if player 1, put X at position
-    if (player.playerName().compare(p1.playerName())==0)
+    if (player.playerName().compare(p1->playerName())==0)
     {
-        board[pos] = "X";
+        board[conversion(coordinates)] = "X";
         moves++;
     }
     //if player 2, put O at position
     else
     {
-        board[pos] = "O";
+        board[conversion(coordinates)] = "O";
         moves++;
     }
     grid();
@@ -125,26 +138,42 @@ void Game::checkGrid()
     {
         if ((board[0].compare(board[1])==0) && (board[1].compare(board[2])==0))
         {
-            // top horizontal match
             if (board[0].compare("X")==0)
-                p1.addWin();
+            {
+                p1->addWin();
+                moves = 9;
+            }
             else
-                p2.addWin();
+            {
+                p2->addWin();
+                moves = 9;
+            }
         }
         if ((board[0].compare(board[3])==0) && (board[3].compare(board[6])==0))
         {
-            //first row vertical
             if (board[0].compare("X")==0)
-                p1.addWin();
+            {
+                p1->addWin();
+                moves = 9;
+            }
             else
-                p2.addWin();
+            {
+                p2->addWin();
+                moves = 9;
+            }
         }
         if ((board[0].compare(board[4])==0) && (board[4].compare(board[8])==0))
         {
             if (board[0].compare("X")==0)
-                p1.addWin();
+            {
+                p1->addWin();
+                moves = 9;
+            }
             else
-                p2.addWin();
+            {
+                p2->addWin();
+                moves = 9;
+            }
         }
     }
     
@@ -152,26 +181,43 @@ void Game::checkGrid()
     {
         if ((board[4].compare(board[3])==0) && (board[3].compare(board[5])==0))
         {
-            // top horizontal match
             if (board[0].compare("X")==0)
-                p1.addWin();
+            {
+                p1->addWin();
+                moves = 9;
+            }
             else
-                p2.addWin();
+            {
+                p2->addWin();
+                moves = 9;
+            }
+            
         }
         if ((board[4].compare(board[1])==0) && (board[1]).compare(board[7])==0)
         {
-            //first row vertical
             if (board[0].compare("X")==0)
-                p1.addWin();
+            {
+                p1->addWin();
+                moves = 9;
+            }
             else
-                p2.addWin();
+            {
+                p2->addWin();
+                moves = 9;
+            }
         }
         if ((board[4].compare(board[2])==0) && (board[2].compare(board[6])==0))
         {
             if (board[0].compare("X")==0)
-                p1.addWin();
+            {
+                p1->addWin();
+                moves = 9;
+            }
             else
-                p2.addWin();
+            {
+                p2->addWin();
+                moves = 9;
+            }
         }
     }
     
@@ -179,19 +225,29 @@ void Game::checkGrid()
     {
         if ((board[8].compare(board[6])==0) && (board[6].compare(board[7])==0))
         {
-            // top horizontal match
             if (board[0].compare("X")==0)
-                p1.addWin();
+            {
+                p1->addWin();
+                moves = 9;
+            }
             else
-                p2.addWin();
+            {
+                p2->addWin();
+                moves = 9;
+            }
         }
         if ((board[8].compare(board[2])==0) && (board[2].compare(board[5])==0))
         {
-            //first row vertical
             if (board[0].compare("X")==0)
-                p1.addWin();
+            {
+                p1->addWin();
+                moves = 9;
+            }
             else
-                p2.addWin();
+            {
+                p2->addWin();
+                moves = 9;
+            }
         }
     }
 }
@@ -199,34 +255,61 @@ void Game::checkGrid()
 
 void Game::play()
 {
-    for (int i = 0; i < 9; i++)
+    while (moves<9)
     {
-        if ( (i==0) || (i%2 == 0))
+        if ( (moves==0) || (moves%2 == 0))
         {
-            playerMove(p1);
+            playerMove(*p1);
         }
         else
         {
-            playerMove(p2);
+            playerMove(*p2);
         }
     }
+    moves = 0;
+    clearGrid();
 }
 
 //prints the score
 void Game::showScore()
 {
-    cout << p1.playerName() << ": " << p1.playerScore() << endl;
-    cout << p2.playerName() << ": " << p2.playerScore() << endl;
+    cout << p1->playerName() << ": " << p1->playerScore() << endl;
+    cout << p2->playerName() << ": " << p2->playerScore() << endl;
 }
 
 //
-void Game::present()
+int Game::findWinner(Person &p1, Person &p2)
 {
-    
+    if (p1.playerScore() > p2.playerScore())
+    {
+        return 1;
+    }
+    else if (p2.playerScore() > p1.playerScore())
+    {
+        return 2;
+    }
+    else
+    {
+        return 3;
+    }
 }
 
-//actually do the game
-void Game::playMe(Person &p1, Person &p2)
+void Game::presentWinner()
 {
-    
+    if (Game::findWinner(*p1, *p2) == 1)
+    {
+         cout << p1->playerName() << " wins!!" << endl;
+    }
+    else if (Game::findWinner(*p1, *p2)==2)
+    {
+         cout << p2->playerName() << " wins!!" << endl;
+    }
+    else if (findWinner(*p1, *p2)==3)
+    {
+        cout << "It is a draw!! Congrats, you are both winners!!" << endl;
+    }
 }
+
+
+
+
